@@ -12,3 +12,7 @@ class FibonacciListResponse(BaseModel):
     page: int
     page_size: int
     numbers: List[FibonacciResponse]
+
+
+class BlacklistResponse(BaseModel):
+    message: str

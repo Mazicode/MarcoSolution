@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
 
+from app.docs import FIBONACCI_DOCS, FIBONACCI_LIST_DOCS
 from app.schemas import FibonacciResponse, FibonacciListResponse
-from app.utils import fibonacci
+from app.utils import fibonacci, paginate
 
 router = APIRouter()
 
@@ -14,7 +15,7 @@ def get_blacklist():
     return blacklist
 
 
-@router.get("/fibonacci/{number}", response_model=FibonacciResponse)
+@router.get("/fibonacci/{number}", response_model=FibonacciResponse, **FIBONACCI_DOCS)
 def get_fibonacci_number(number: int):
     local_blacklist = get_blacklist()
     if number in local_blacklist:
@@ -31,7 +32,7 @@ def get_fibonacci_number(number: int):
     return {"number": number, "fibonacci": fib_result}
 
 
-@router.get("/fibonacci", response_model=FibonacciListResponse)
+@router.get("/fibonacci", response_model=FibonacciListResponse, **FIBONACCI_LIST_DOCS)
 def get_fibonacci_list(
         n: int,
         page: int = 1,
