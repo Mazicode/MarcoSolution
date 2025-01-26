@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from app.schemas import FibonacciResponse
+from app.schemas import FibonacciResponse, FibonacciListResponse
 from app.utils import fibonacci
 
 router = APIRouter()
@@ -29,3 +29,29 @@ def get_fibonacci_number(number: int):
         fibonacci_cache[number] = fib_result
 
     return {"number": number, "fibonacci": fib_result}
+
+
+@router.get("/fibonacci", response_model=FibonacciListResponse)
+def get_fibonacci_list(
+        n: int,
+        page: int = 1,
+        page_size: int = 100,
+):
+    blacklist = get_blacklist()
+
+    if n <= 0:
+        raise HTTPException(status_code=422, detail="The 'n' parameter must be a positive integer.")
+    if page <= 0 or page_size <= 0:
+        raise HTTPException(status_code=422, detail="Page and page size must be positive integers.")
+
+    result = paginate(n, page, page_size, blacklist)
+
+    for item in result["numbers"]:
+        number = item["number"]
+        if number in fibonacci_cache:
+            item["fibonacci"] = fibonacci_cache[number]
+        else:
+            item["fibonacci"] = fibonacci(number)
+            fibonacci_cache[number] = item["fibonacci"]  # Cache the result
+
+    return result
