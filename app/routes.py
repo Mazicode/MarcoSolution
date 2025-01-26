@@ -47,6 +47,7 @@ def blacklist_number(
         request: BlacklistRequest, redis_conn: Redis = Depends(get_redis_connection)
 ):
     redis_conn.sadd("blacklist", request.number)
+
     return {"message": f"Number {request.number} has been blacklisted."}
 
 
@@ -55,6 +56,7 @@ def remove_from_blacklist(
         request: BlacklistRequest, redis_conn: Redis = Depends(get_redis_connection)
 ):
     redis_conn.srem("blacklist", request.number)
+
     return {"message": f"Number {request.number} has been removed from the blacklist."}
 
 
