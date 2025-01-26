@@ -1,10 +1,18 @@
+from app.exceptions import InvalidNumberError
+
+
 def fibonacci(n: int) -> int:
+    """Calculate Fibonacci the iterative way instead of recursive, for improvements."""
     if n <= 0:
-        raise ValueError("Fibonacci number must be a positive integer.")
+        raise InvalidNumberError(n)
     if n == 1 or n == 2:
         return 1
 
-    return fibonacci(n - 1) + fibonacci(n - 2)
+    a, b = 1, 1
+    for _ in range(2, n):
+        a, b = b, a + b
+
+    return b
 
 
 def paginate(n: int, page: int, page_size: int = 10, blacklist: set = None):

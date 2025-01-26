@@ -60,7 +60,7 @@ def test_blacklist_invalid_number():
 
 
 def test_remove_from_blacklist():
-    response = client.delete("/blacklist", json={"number": 123})
+    response = client.request("DELETE", "/blacklist", json={"number": 123})
     assert response.status_code == 200
     assert response.json() == {"message": "Number 123 has been removed from the blacklist."}
 

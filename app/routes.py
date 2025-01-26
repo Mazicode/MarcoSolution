@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
 from app.docs import FIBONACCI_DOCS, FIBONACCI_LIST_DOCS, BLACKLIST_ADD_DOCS, BLACKLIST_REMOVE_DOCS
-from app.schemas import FibonacciResponse, FibonacciListResponse
+from app.schemas import FibonacciResponse, FibonacciListResponse, BlacklistRequest
 from app.utils import fibonacci, paginate
 
 router = APIRouter()
