@@ -45,3 +45,27 @@ def test_get_fibonacci_number():
 
     blacklist.clear()
     fibonacci_cache.clear()
+
+
+def test_blacklist_number():
+    response = client.post("/blacklist", json={"number": 123})
+    assert response.status_code == 200
+    assert response.json() == {"message": "Number 123 has been blacklisted."}
+
+
+def test_blacklist_invalid_number():
+    response = client.post("/blacklist", json={"number": -1})
+    assert response.status_code == 422
+    assert response.json() == {"detail": "Only positive integers can be blacklisted."}
+
+
+def test_remove_from_blacklist():
+    response = client.delete("/blacklist", json={"number": 123})
+    assert response.status_code == 200
+    assert response.json() == {"message": "Number 123 has been removed from the blacklist."}
+
+
+def test_health_check():
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.json() == {"status": "healthy"}

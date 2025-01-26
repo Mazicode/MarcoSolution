@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from app.docs import FIBONACCI_DOCS, FIBONACCI_LIST_DOCS
+from app.docs import FIBONACCI_DOCS, FIBONACCI_LIST_DOCS, BLACKLIST_ADD_DOCS, BLACKLIST_REMOVE_DOCS
 from app.schemas import FibonacciResponse, FibonacciListResponse
 from app.utils import fibonacci, paginate
 
@@ -56,3 +56,22 @@ def get_fibonacci_list(
             fibonacci_cache[number] = item["fibonacci"]  # Cache the result
 
     return result
+
+
+@router.post("/blacklist", **BLACKLIST_ADD_DOCS)
+def blacklist_number(request: BlacklistRequest):
+    if request.number <= 0:
+        raise HTTPException(status_code=422, detail="Only positive integers can be blacklisted.")
+    blacklist.add(request.number)
+    return {"message": f"Number {request.number} has been blacklisted."}
+
+
+@router.delete("/blacklist", **BLACKLIST_REMOVE_DOCS)
+def remove_from_blacklist(request: BlacklistRequest):
+    blacklist.discard(request.number)  # Safely remove without error if not present
+    return {"message": f"Number {request.number} has been removed from the blacklist."}
+
+
+@router.get("/health")
+def health_check():
+    return {"status": "healthy"}

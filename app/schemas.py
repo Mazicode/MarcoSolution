@@ -14,5 +14,9 @@ class FibonacciListResponse(BaseModel):
     numbers: List[FibonacciResponse]
 
 
+class BlacklistRequest(BaseModel):
+    number: int
+
+
 class BlacklistResponse(BaseModel):
     message: str
