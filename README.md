@@ -1,4 +1,3 @@
-# GameAnalyticsTest
 ## Fibonacci and Blacklist Service
 
 This service implements two primary features:
